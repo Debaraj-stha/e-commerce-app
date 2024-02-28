@@ -13,6 +13,7 @@ import 'package:frontend/view/purchase.dart';
 import 'package:frontend/view/purchsePage.dart';
 import 'package:frontend/view/recommendedpage.dart';
 import 'package:frontend/view/reviews.dart';
+import 'package:frontend/view/searchLocation.dart';
 import 'package:frontend/view/signup.dart';
 import 'package:frontend/view/wishlist.dart';
 
@@ -51,7 +52,9 @@ class Routes {
       case RoutesName.CATEGORYPRODUCT:
         return MaterialPageRoute(builder: (context) => const CategoryProduct());
       case RoutesName.GOOGLEMAPPAGE:
-        return MaterialPageRoute(builder: (context) => const GoogleMapPage());
+        return MaterialPageRoute(builder: (context) => const GoogelMapPage());
+      case RoutesName.SEARCHLOCATION:
+        return MaterialPageRoute(builder: (context) => const SearchLocation());
 
       default:
         return MaterialPageRoute(builder: (context) {

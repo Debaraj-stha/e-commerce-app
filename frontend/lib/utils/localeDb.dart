@@ -64,11 +64,18 @@ class DBController {
   }
 
   Future<bool> insertAddress(Address a) async {
-    final res = await insert(
-      a,
-      'address',
-    );
-    return res;
+    try {
+      final dbClient = await db;
+      final res = await dbClient!.insert('address', a.toJson());
+      if (res > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      Utils.printMessage("Exception as :$e");
+      return false;
+    }
   }
 
   Future<bool> deleteWishlist(int id) async {

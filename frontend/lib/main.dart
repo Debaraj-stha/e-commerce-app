@@ -95,7 +95,7 @@ class _MyAppState extends State<MyApp> {
                 : Locale(widget.locale),
             supportedLocales: const [Locale('en'), Locale('hi')],
             title: 'Flutter Demo',
-            home: const GoogleMapPage(),
+            home: const GoogelMapPage(),
             // initialRoute: RoutesName.Home,
             // onGenerateRoute: Routes.generateRoute,
             themeMode: widget.themeMode,

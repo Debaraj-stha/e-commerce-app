@@ -5,10 +5,9 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:frontend/model/locationmodel.dart';
-import 'package:frontend/resources/components/boldText.dart';
-import 'package:frontend/resources/components/mediumText.dart';
 import 'package:frontend/utils/topLevelFunction.dart';
 import 'package:frontend/utils/utils.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -20,7 +19,7 @@ import '../resources/appURL.dart';
 class GoogleModelView extends GetxController {
   static LatLng target = const LatLng(27.708215, 85.321317);
   String userId = "1";
-  Address? dAddress;
+  Address dAddress = Address();
   final List<Marker> markers = [];
   List<dynamic> places = [];
   static CameraPosition initialCameraPosition = CameraPosition(
@@ -113,34 +112,75 @@ class GoogleModelView extends GetxController {
     addShopMarker(position);
   }
 
-  Future<void> getLocationFromCoordnites(LatLng coord) async {
+  Future<void> getLocationFromCoordnites(
+      LatLng coord, BuildContext context) async {
+    List<Placemark> places =
+        await placemarkFromCoordinates(coord.latitude, coord.longitude);
+    print(places);
+    String a =
+        "Street=${places[0].street}\ncountry=${places[0].country}\nLocality=${places[0].locality}\nsublocality=${places[0].subLocality}\nSubadministrative area=${places[0].subAdministrativeArea}\nlat=${coord.latitude}\nlong=${coord.longitude}";
+
+    conformDeliveryAddress(context, a);
+//  Name: R853+GX,
+// I/flutter ( 1646):       Street: R853+GX,
+// I/flutter ( 1646):       ISO Country Code: NP,
+// I/flutter ( 1646):       Country: Nepal,
+// I/flutter ( 1646):       Postal code: 56700,
+// I/flutter ( 1646):       Administrative area: ,
+// I/flutter ( 1646):       Subadministrative area: Sunsari,
+// I/flutter ( 1646):       Locality: Dharan,
+// I/flutter ( 1646):       Sublocality: Panchkanya,
+// I/flutter ( 1646):       Thoroughfare: ,
+// I/flutter ( 1646):       Subthoroughfare: ,       Name: R854+R45,
+// I/flutter ( 1646):       Street: R854+R45,
+// I/flutter ( 1646):       ISO Country Code: NP,
+// I/flutter ( 1646):       Country: Nepal,
+// I/flutter ( 1646):       Postal code: 56700,
+// I/flutter ( 1646):       Administrative area: Koshi Province,
+// I/flutter ( 1646):       Subadministrative area: Sunsari,
+// I/flutter ( 1646):       Locality: Dharan,
+// I/flutter ( 1646):       Sublocality: Panchkanya,
+// I/flutter ( 1646):       Thoroughfare: ,
+// I/flutter ( 1646):       Subthoroughfare: ,       Name: Unnamed Road,
+// I/flutter ( 1646):       Street: Unnamed Road,
+// I/flutter ( 1646):       ISO Country Code: NP,
+// I/flutter ( 1646):       Country: Nepal,
+// I/flutter ( 1646):       Postal code: 56700,
+// I/flutter ( 1646):       Administrative area: ,
+// I/flutter ( 1646):       Subadministrative area: Sunsari,
+// I/flutter ( 1646):       Locality: Dharan,
+// I/flutter ( 1646):       Sublocality: Panchkanya,
+// I/flutter ( 1646):       Thoroughfare: Unnamed Road,
+// I/flutter ( 1646):       Subthoroughfare: ,       Name: Panchkanya,
+// I/flutter ( 1646):       Street: Panchkanya,
+// I/flutter ( 1646):       ISO Country Code: NP,
     // List<PlaceMark>
   }
 
   conformDeliveryAddress(BuildContext context, String location) {
-    dAddress!.address = location;
+    dAddress.address = location;
     return showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              title: const BoldText(
-                text: "Is this your delivery address",
+              title: const Text(
+                "Is this your delivery address",
               ),
-              content: MediumText(text: location),
+              content: Text(location),
               actions: [
                 TextButton(
-                  child: const MediumText(
-                    text: "Close",
+                  child: const Text(
+                    "Close",
                   ),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
                 TextButton(
-                    child: const MediumText(
-                      text: "Yes",
+                    child: const Text(
+                      "Yes",
                     ),
                     onPressed: () async {
-                      await dbController.insertAddress(dAddress!);
+                      await dbController.insertAddress(dAddress);
                       await updateDeleveryAddress();
                       Navigator.of(context).pop();
                     })
