@@ -31,9 +31,9 @@ class _GoogelMapPageState extends State<GoogelMapPage> {
   final Completer<GoogleMapController> _controller = Completer();
   final List<Marker> _markesr = [];
   final List<String> images = [
-    "asset/images/splash_srceen.png",
-    "asset/images/splash_srceen.png",
-    "asset/images/splash_srceen.png",
+    "asset/images/ecommerce.png",
+    "asset/images/shop1.png",
+    "asset/images/shopping.png",
   ];
   final List<LatLng> _latLngs = [
     const LatLng(26.824949, 87.275722),
