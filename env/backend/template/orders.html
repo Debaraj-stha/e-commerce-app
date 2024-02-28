@@ -1,0 +1,50 @@
+{% extends "base.html" %} {%block title%} Orders {%endblock title%}
+ {%block body%}
+<div class="container mt-5 pt-5">
+<h2>Orders</h2>
+  {%if page_obj is not None%}
+  <table class="table table-striped table-dark">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Username</th>
+        <th scope="col">Delivery address</th>
+          <th scope="col">Product</th>
+            <th scope="col">Status</th>
+        <th scope="col">Quantity</th>
+      </tr>
+    </thead>
+<tbody>
+    {%for order in page_obj%} 
+ <tr>
+      <th scope="row">{{order.id}}</th>
+      <td>{{order.user.name}}</td>
+      <td>{{order.user.address}}</td>
+      <td>{{order.product.title}}</td>
+       <td>{{order.status}}</td>
+      <td>{{order.quantity}}</td>
+    </tr>
+    
+    {%endfor%} 
+    </tbody>
+    
+    {%endif%}
+  </table>
+  <nav>
+    <ul class="pagination">
+        <li class="page-item {% if page_obj.number == 1 %} disabled{% endif %}">
+            <a class="page-link" href="{% if page_obj.has_previous %}?shopId=1&page={{ page_obj.previous_page_number }}{% endif %}">Previous</a>
+        </li>
+        
+
+        {% for i in page_obj.paginator.page_range %}
+            <li class="page-item"><a class="page-link" href="?&shopId=1&page={{ i }}">{{ i }}</a></li>
+        {% endfor %}
+
+        <li class="page-item {% if page_obj.number == page_obj.paginator.num_pages %} disabled{% endif %}">
+            <a class="page-link" href="{% if page_obj.has_next %}?shopId=1&page={{ page_obj.next_page_number }}{% endif %}">Next</a>
+        </li>
+    </ul>
+</nav>
+</div>
+{%endblock body%}

@@ -1,0 +1,14 @@
+{%extends 'base.html'%}
+{%block body%}
+<div class="container mt-5 pt-5">
+<form method="post">
+   
+    <div class="form-group">
+        <label for="message">Message</label>
+        <textarea class="form-control" id="message" rows="3"name="message"id="message"></textarea>
+      </div>
+    
+    </form>
+    <button type="submit" class="btn btn-primary" onclick="submitForm()">Submit</button>
+</div>
+{%endblock body%}

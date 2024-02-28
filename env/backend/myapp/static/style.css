@@ -1,0 +1,38 @@
+.animate {
+    /* Apply the animation to elements with the 'animate' class */
+    animation: translate 1s ease-in-out;
+    -webkit-animation: translate 1s ease-in-out; /* Safari and Chrome */
+    -moz-animation: translate 1s ease-in-out; /* Firefox */
+}
+
+@keyframes translate {
+    0% {
+        transform: translateY(-100px);
+    }
+    100% {
+        transform: translateY(0px);
+ 
+    }
+}
+
+/* Firefox-specific keyframes */
+@-moz-keyframes translate {
+    0% {
+        transform: translateY(-100px);
+    }
+    100% {
+        transform: translateY(0px);
+ 
+    }
+}
+
+/* Webkit-specific keyframes */
+@-webkit-keyframes translate {
+    0% {
+        transform: translateY(-100px);
+    }
+    100% {
+        transform: translateY(0px);
+ 
+    }
+}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{%block title%} Messages{%endblock title%}
+{%block body%}
+
+<div class="container mt-5 pt-5">
+    {%if page_obj is not None %}
+    <h1>My Messages</h1>
+    {%for  message in page_obj%}
+        <a href="/reply/message?shop_id={{message.shop.id}}&&user_id={{message.user.id}}&&message_id={{message.id}}">
+            <div>
+                <h4>
+                    {% if message.isSender %}
+                        From: {{ message.user.name }}
+                    {% else %}
+                        To: {{ message.user.name }}
+                    {% endif %}
+                </h4>
+                <p>{{message}}</p>
+                <p>{{message.create_at}}</p>
+                
+            </div>
+        </a>
+
+    {%endfor%}
+
+  
+
+<nav>
+    <ul class="pagination">
+        <li class="page-item {% if page_obj.number == 1 %} disabled{% endif %}">
+            <a class="page-link" href="{% if page_obj.has_previous %}?shopId=1&page={{ page_obj.previous_page_number }}{% endif %}">Previous</a>
+        </li>
+        
+
+        {% for i in page_obj.paginator.page_range %}
+            <li class="page-item"><a class="page-link" href="?shopId=1&page={{ i }}">{{ i }}</a></li>
+        {% endfor %}
+
+        <li class="page-item {% if page_obj.number == page_obj.paginator.num_pages %} disabled{% endif %}">
+            <a class="page-link" href="{% if page_obj.has_next %}?shopId=1&page={{ page_obj.next_page_number }}{% endif %}">Next</a>
+        </li>
+    </ul>
+</nav>
+
+{%endif%}
+</div>
+{%endblock body%}

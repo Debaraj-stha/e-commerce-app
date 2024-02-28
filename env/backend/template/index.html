@@ -1,0 +1,115 @@
+{%extends 'base.html'%} {%block title%} index paage{%endblock title%} 
+{%block body%}
+
+<div class="container mt-5 pt-5">
+  <header>
+    <h1>Welcome to Our E-Commerce App</h1>
+    <p>Shop hassle-free with our intuitive e-commerce platform.</p>
+  </header>
+</div>
+<section class="container" id="about">
+  <h2>About</h2>
+  <p>
+    Welcome to our E-Commerce App! We're dedicated to providing you with the
+    best online shopping experience. Our platform offers a wide range of
+    products from various categories, ensuring there's something for everyone.
+    Whether you're looking for electronics, clothing, or home essentials, we've
+    got you covered.
+  </p>
+</section>
+
+<section class="container" id="api">
+  <h2>API</h2>
+  <p>
+    Our API allows seamless integration with our platform. Here are some of the
+    key endpoints:
+  </p>
+  <ul>
+    <li><strong>Load Templates:</strong> GET - /</li>
+    <li><strong>Register User:</strong> POST - /user/register</li>
+    <li><strong>Get Category Products:</strong> GET - /category/product</li>
+    <li>
+      <strong>Get Product Recommendations:</strong> GET -
+      /product/recommendation
+    </li>
+    <li><strong>Send OTP:</strong> POST - /send-email</li>
+    <li><strong>User Login:</strong> POST - /user/login</li>
+    <li><strong>Get All Categories:</strong> GET - /category/group</li>
+    <li><strong>Search Products:</strong> GET - /product/search</li>
+    <li><strong>Add Review:</strong> POST - /review/add</li>
+    <li><strong>Place Order:</strong> POST - /product/order</li>
+    <li><strong>Update Order Status:</strong> POST - /order/update</li>
+    <li>
+      <strong>Update Delivery Address:</strong> POST - /delivery-address/add
+    </li>
+    <li><strong>Get Low Budget Products:</strong> GET - /product/low-budget</li>
+    <li><strong>Send Message:</strong> POST - /message/send</li>
+    <li><strong>Get Messages:</strong> GET - /message/get</li>
+    <li><strong>Get Single Product:</strong> GET - /product/single</li>
+    <li><strong>Get User Reviews:</strong> GET - /product/reviews</li>
+    <li><strong>Update Review:</strong> POST - /product/review/edit</li>
+    <li><strong>Send Notification:</strong> POST - /notification/send</li>
+    <li><strong>Get User Notifications:</strong> GET - /user/notifications</li>
+    <li>
+      <strong>Update Notification Status:</strong> POST - /notification/seen
+    </li>
+    <li><strong>Get Single Shop Message:</strong> GET - /shop/message</li>
+  </ul>
+</section>
+
+<section class="container" id="features">
+  <h2>Features</h2>
+  <p>
+    Our e-commerce app comes packed with features to enhance your shopping
+    experience:
+  </p>
+  <ul>
+    <li>
+      <strong>Add to Cart:</strong> Easily add products to your cart for quick
+      checkout.
+    </li>
+    <li>
+      <strong>Wishlist:</strong> Save your favorite items for later and keep
+      track of products you love.
+    </li>
+    <li>
+      <strong>Payment Options:</strong> Choose from a variety of payment
+      methods, including:
+    </li>
+    <ul>
+      <li>
+        <strong>eSewa:</strong> Make secure payments using the popular eSewa
+        digital wallet.
+      </li>
+      <li>
+        <strong>Khalti:</strong> Seamlessly complete transactions with the
+        Khalti digital payment platform.
+      </li>
+      <li>
+        <strong>Cash on Delivery:</strong> Pay for your order with cash upon
+        delivery for added convenience.
+      </li>
+    </ul>
+  </ul>
+</section>
+
+<section class="container" id="contact">
+  <h2>Contact</h2>
+  <p>
+    If you have any questions, feedback, or inquiries, please don't hesitate to
+    get in touch with us. Our customer support team is here to assist you.
+  </p>
+
+  <strong>Email:</strong> xyz@example.com<br />
+  <strong>Phone:</strong> +97798000000<br />
+  <strong>Address:</strong> Dharan,Nepal<br>
+  <strong>Github:</strong>https://github.com/Debaraj-stha<br />
+  <strong>Linkdin:</strong>linkedin.com/in/debaraj-stha-784689288
+  <br />
+</section>
+<div class="container">
+  <footer>
+    <p>&copy; 2024 E-Commerce App. All rights reserved.</p>
+  </footer>
+</div>
+{%endblock body%}
