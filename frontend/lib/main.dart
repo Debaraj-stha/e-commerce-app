@@ -13,7 +13,7 @@ import 'package:frontend/model-view/reviewModelView.dart';
 import 'package:frontend/utils/constraints.dart';
 import 'package:frontend/utils/handleTheme.dart';
 import 'package:frontend/utils/utils.dart';
-import 'package:frontend/view/googlemap.dart';
+import 'package:frontend/view/otpPage.dart';
 import 'package:get/get.dart';
 import 'package:khalti_flutter/khalti_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -95,7 +95,7 @@ class _MyAppState extends State<MyApp> {
                 : Locale(widget.locale),
             supportedLocales: const [Locale('en'), Locale('hi')],
             title: 'Flutter Demo',
-            home: const GoogelMapPage(),
+            home: const OTPPage(),
             // initialRoute: RoutesName.Home,
             // onGenerateRoute: Routes.generateRoute,
             themeMode: widget.themeMode,

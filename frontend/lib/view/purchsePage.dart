@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:frontend/model-view/googleModelView.dart';
 import 'package:frontend/model-view/ordre.dart';
 import 'package:frontend/model/cartModel.dart';
 import 'package:frontend/resources/appColors.dart';
@@ -19,6 +21,7 @@ class PurchasePage extends StatefulWidget {
 
 class _PurchasePageState extends State<PurchasePage> {
   final OrderModel _o = Get.find<OrderModel>();
+  final GoogleModelView _g = Get.find<GoogleModelView>();
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +94,34 @@ class _PurchasePageState extends State<PurchasePage> {
                         .primaryTextTheme
                         .bodyMedium!
                         .copyWith(color: AppColors.textColorPrimary),
-                  ))
+                  )),
+              Container(
+                decoration: BoxDecoration(
+                    border: Border.all(),
+                    borderRadius: BorderRadius.circular(8)),
+                margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      prefix: Icon(
+                        color: Theme.of(context).primaryIconTheme.color,
+                        FontAwesomeIcons.locationDot,
+                      ),
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          print("object");
+                        },
+                        child: Icon(
+                          FontAwesomeIcons.edit,
+                          color: Theme.of(context).primaryIconTheme.color,
+                        ),
+                      )),
+                  style: Theme.of(context).primaryTextTheme.bodyMedium,
+                  readOnly: true,
+                  controller: _g.addressingController,
+                ),
+              )
             ],
           ),
         ),

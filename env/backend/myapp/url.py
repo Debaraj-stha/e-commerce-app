@@ -33,5 +33,6 @@ urlpatterns = [
     path("send/reply", views.postReply),
     path("shop/orders", getShopOrders),
     path("shop/register", registerShop),
-    path('register/shop',views.registerMyShop)
+    path('register/shop',views.registerMyShop),
+    path('verify-email', views.verifyOTP)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

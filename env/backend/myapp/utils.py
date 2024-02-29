@@ -11,7 +11,6 @@ def getProducts(products) -> list:
     recommended = []
     for product in products:
         ratings = Rating.objects.filter(product=product)
-        average_rating = ratings.aggregate(avg_rating=Avg("rating"))["avg_rating"]
         shop = {}
         shopId = product.shopId
         shop = {
@@ -33,7 +32,7 @@ def getProducts(products) -> list:
                 "hilights": product.hilight,
                 "size": product.size,
                 "description": product.description,
-                "average_rating": average_rating if average_rating else 0,
+                "average_rating": product.avg_rating if product.avg_rating else 0,
                 "tags": product.tags if product.tags else [],
                 "brand": product.brand,
                 "reviews": (
@@ -57,8 +56,10 @@ def getProducts(products) -> list:
 
 
 def sendMail(subject, body, mailTo) -> int:
+    print("calling sendMail")
     mailFrom = settings.EMAIL_HOST_USER
-    status = send_mail(subject, body, mailFrom, [mailTo])
+    print(mailFrom)
+    status = send_mail(subject, body, mailFrom, [mailTo],fail_silently=False,html_message=body)
     return int(status)
 
 

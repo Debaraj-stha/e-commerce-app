@@ -66,7 +66,8 @@ class DBController {
   Future<bool> insertAddress(Address a) async {
     try {
       final dbClient = await db;
-      final res = await dbClient!.insert('address', a.toJson());
+      await dbClient!.delete('address');
+      final res = await dbClient.insert('address', a.toJson());
       if (res > 0) {
         return true;
       } else {
@@ -83,11 +84,19 @@ class DBController {
     return res;
   }
 
-  Future<Address> getAddress() async {
-    final dbClient = await db;
-    await dbClient!.delete('address');
-    final res = await dbClient.query('address');
-    return Address.fromJson(res[0]);
+  Future<Address?> getAddress() async {
+    try {
+      final dbClient = await db;
+      if (dbClient != null) {
+        final res = await dbClient.query('address');
+        return Address.fromJson(res[0]);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      Utils.printMessage("Exception as :$e");
+      return null;
+    }
   }
 
   Future<bool> insertWishlist(CartModel p) async {

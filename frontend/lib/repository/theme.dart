@@ -55,7 +55,7 @@ class Themes extends GetxController {
           bodyMedium: TextStyle(
               color: AppColors.textColorPrimary,
               fontFamily: "Roboto",
-              fontWeight: FontWeight.w400),
+              fontWeight: FontWeight.w600),
           titleSmall: TextStyle(
             color: AppColors.textColorPrimary,
             fontFamily: "Roboto",
@@ -63,11 +63,11 @@ class Themes extends GetxController {
           bodyLarge: TextStyle(
               color: AppColors.textColorPrimary,
               fontFamily: "Roboto",
-              fontWeight: FontWeight.w500),
+              fontWeight: FontWeight.w700),
           bodySmall: TextStyle(
               color: AppColors.textColorPrimary,
               fontFamily: "Roboto",
-              fontWeight: FontWeight.w400)));
+              fontWeight: FontWeight.w500)));
 
   final lightTheme = ThemeData(
     primaryColor: AppColors.secondary,
@@ -119,7 +119,7 @@ class Themes extends GetxController {
         bodyMedium: TextStyle(
           color: AppColors.third,
           fontFamily: "Roboto",
-          fontWeight: FontWeight.w400,
+          fontWeight: FontWeight.w600,
         ),
         titleSmall: TextStyle(
           color: AppColors.textColorPrimary,
@@ -127,7 +127,7 @@ class Themes extends GetxController {
         ),
         bodyLarge: TextStyle(
             color: AppColors.third,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w700,
             fontFamily: "Roboto"),
         bodySmall: TextStyle(
           color: AppColors.third,

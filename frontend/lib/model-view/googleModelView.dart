@@ -17,99 +17,103 @@ import '../data/network/networkAPI.dart';
 import '../resources/appURL.dart';
 
 class GoogleModelView extends GetxController {
-  static LatLng target = const LatLng(27.708215, 85.321317);
+  final TextEditingController textEditingController = TextEditingController();
+  TextEditingController addressingController = TextEditingController();
+  final FocusNode focusNode = FocusNode();
   String userId = "1";
-  Address dAddress = Address();
+  List places = [];
+  static CameraPosition cameraPosition =
+      const CameraPosition(target: LatLng(26.824949, 87.275722), zoom: 14);
+  final Completer<GoogleMapController> controller = Completer();
   final List<Marker> markers = [];
-  List<dynamic> places = [];
-  static CameraPosition initialCameraPosition = CameraPosition(
-    zoom: 14,
-    target: target,
-  );
+  Address dAddress = Address();
+  final List<String> images = [
+    "asset/images/ecommerce.png",
+    "asset/images/shop1.png",
+    "asset/images/shopping.png",
+  ];
+  final List<LatLng> _latLngs = [
+    const LatLng(26.824949, 87.275722),
+    const LatLng(26.2, 87.2),
+    const LatLng(26.3, 87.3)
+  ];
+  final List<Marker> _markerList = [
+    const Marker(
+        markerId: MarkerId("1"),
+        position: LatLng(26.824949, 87.275722),
+        infoWindow: InfoWindow(title: "My location")),
+    const Marker(
+      markerId: MarkerId("2"),
+      position: LatLng(37.212, 86.275722),
+    )
+  ];
 
-  Future<Uint8List> loadIcon() async {
-    final ByteData data =
-        await rootBundle.load("asset/images/splash_srceen.png");
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
-    ui.FrameInfo frame = await codec.getNextFrame();
-    return (await frame.image.toByteData(format: ui.ImageByteFormat.png))!
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    final ByteData data = await rootBundle.load(path);
+
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    ui.FrameInfo framinfo = await codec.getNextFrame();
+    return (await framinfo.image.toByteData(format: ui.ImageByteFormat.png))!
         .buffer
         .asUint8List();
   }
 
-  final Completer<GoogleMapController> controller = Completer();
-  Future<void> moveToPosition(CameraPosition position) async {
-    GoogleMapController mycontroller = await controller.future;
-    mycontroller.animateCamera(CameraUpdate.newCameraPosition(position));
-  }
+  Future<void> addMarkers() async {
+    markers.addAll(_markerList);
+    for (var i = 0; i < images.length; i++) {
+      final Uint8List icon = await getBytesFromAsset(images[i], 100);
 
-  Future<Position?> getUserCurrentPosition() async {
-    final permission = await Geolocator.isLocationServiceEnabled();
-    if (!permission) {
-      final status = await Geolocator.requestPermission();
-      if (status == LocationPermission.denied) {
-        return null;
-      }
-      return await Geolocator.getCurrentPosition();
-    } else {
-      return await Geolocator.getCurrentPosition();
+      markers.add(Marker(
+          icon: BitmapDescriptor.fromBytes(icon),
+          position: _latLngs[i],
+          markerId: MarkerId(i.toString()),
+          infoWindow: InfoWindow(title: "Marker $i")));
     }
   }
 
-  Future<void> moveToUserLocation() async {
-    final userPosition = await getUserCurrentPosition();
-    Utils.printMessage(userPosition.toString());
-    Marker marker = Marker(
-        markerId: const MarkerId("2"),
-        visible: true,
-        icon: BitmapDescriptor.defaultMarker,
-        position: LatLng(userPosition!.latitude, userPosition.longitude));
-    markers.add(marker);
-    CameraPosition newPosition = CameraPosition(
-        target: LatLng(userPosition.latitude, userPosition.longitude),
-        zoom: 14);
-    await moveToPosition(newPosition);
-    update();
+  Future<void> movetToPosition(CameraPosition position) async {
+    GoogleMapController myController = await controller.future;
+    myController.animateCamera(CameraUpdate.newCameraPosition(position));
+    update(); //move to the camera to given latitude and longitude
   }
 
-  addShopMarker(List<LatLng> position) async {
-    for (var i = 0; i < position.length; i++) {
-      Marker marker = Marker(
-          markerId: MarkerId('$i'),
-          position: position[i],
-          icon: BitmapDescriptor.fromBytes(await loadIcon()));
-      markers.add(marker);
-    }
+  Future<Position> getUserCurrentLocation() async {
+    await Geolocator.requestPermission() //ask the permission for using location
+        .then((value) {})
+        .onError((error, stackTrace) {
+      print("Error: $error");
+    });
+    return await Geolocator
+        .getCurrentPosition(); //return the user current latuitude and longitude
   }
 
-  searchPlace(String value) async {
+  Future<void> searchPlaces(String q) async {
     String token = "1234";
     String key = "AIzaSyDQ2c_pOSOFYSjxGMwkFvCVWKjYOM9siow";
     String baseURL =
         'https://maps.googleapis.com/maps/api/place/autocomplete/json';
-    String request = '$baseURL?input=$value&key=$key&sessiontoken=$token';
+    String request = '$baseURL?input=$q&key=$key&sessiontoken=$token';
     final response = await http.get(Uri.parse(request));
+
     if (response.statusCode != 200) {
       print("response is not come from server");
       return;
     }
-    var place = jsonDecode(response.body.toString())['predictions'];
-    if (value != " " || value.isNotEmpty) {
-      update();
-      print(places);
+    var place = jsonDecode(response.body)['predictions'];
+    places.clear();
+    for (var p in place) {
+      places.add(p);
     }
-  }
-
-  final TextEditingController textEditingController = TextEditingController();
-
-  List<LatLng> position = [
-    const LatLng(26.794386, 87.281731),
-    const LatLng(26.794386, 87.23434),
-    const LatLng(26.794386, 87.281721)
-  ];
-
-  void addMarker() {
-    addShopMarker(position);
+    if (q == '' || q.isEmpty) {
+      update();
+    }
+    update();
+    // if (q != " " || q.isNotEmpty) {
+    //   setState(() {});
+    //   print(places);
+    // }
+    print("places:$places");
   }
 
   Future<void> getLocationFromCoordnites(
@@ -180,7 +184,7 @@ class GoogleModelView extends GetxController {
                       "Yes",
                     ),
                     onPressed: () async {
-                      await dbController.insertAddress(dAddress);
+                      await insertAddress(dAddress, context);
                       await updateDeleveryAddress();
                       Navigator.of(context).pop();
                     })
@@ -199,5 +203,40 @@ class GoogleModelView extends GetxController {
     } catch (e) {
       Utils.printMessage("Exception:$e");
     }
+  }
+
+  Future<void> getSavedAddress() async {
+    try {
+      final res = await dbController.getAddress();
+      dAddress.address = res!.address!;
+      addressingController.text = dAddress.address!;
+      Utils.printMessage(res.toJson().toString());
+    } catch (e) {
+      Utils.printMessage("Exception as:$e");
+    }
+  }
+
+  Future<void> insertAddress(Address a, BuildContext context) async {
+    try {
+      final res = await dbController.insertAddress(a);
+      if (res) {
+        Utils().showSnackBar(
+          "Delivery address added successfully",
+          context,
+        );
+      } else {
+        Utils().showSnackBar(
+            "Something went wrong while adding delivery address", context,
+            isSuccess: false);
+      }
+    } catch (e) {
+      Utils.printMessage("Exceptions as :$e");
+    }
+  }
+
+  Future<void> handleLocationSearchTap(
+      String address, BuildContext context) async {
+    dAddress.address = address;
+    conformDeliveryAddress(context, address);
   }
 }

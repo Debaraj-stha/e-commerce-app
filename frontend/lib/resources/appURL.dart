@@ -1,11 +1,12 @@
 class AppURL {
-  static const baseURL = "http://192.168.1.9:8000";
+  static const baseURL = "http://192.168.1.16:8000";
   static const loginUrl = "$baseURL/user/login";
   static const signUpURL = "$baseURL/user/register";
   static const searchURL = "$baseURL/product/search";
   static const recommendation = "$baseURL/product/recommendation";
   static const productCategory = "$baseURL/category/product";
   static const sentOTP = "$baseURL/send-email";
+  static const verifyOTP = "$baseURL/verify-email";
   static const categoryGroup = "$baseURL/category/group";
   static const reviewAdd = "$baseURL/review/add";
   static const orderProduct = "$baseURL/product/order";

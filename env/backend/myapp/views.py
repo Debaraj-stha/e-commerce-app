@@ -1,3 +1,4 @@
+from email import message
 import json
 import random
 
@@ -10,13 +11,16 @@ from myapp.utils import (
     sendMail,
     getProductMap,
 )
+from datetime import timedelta
+from django.utils import timezone
 from myapp.models import User
 
 from django.db.models import Avg, Q, Max
 from myapp.models import *
 import logging
 from django.views.decorators.csrf import csrf_exempt
-
+from django.conf import settings
+from django.core.mail import send_mail
 
 def loadTemplates(request):
     return render(request, "index.html")
@@ -127,29 +131,41 @@ def Login(request):
         )
 
 
-@api_view(["GET"])
+@api_view(["POST"])
 def sendOTP(request):
     try:
-        data = request.data
+        mailto = request.data.get("mailTo")
+        sessionKey = request.data.get("sessionKey")
         otp = random.randint(100000, 999999)
-        subject = " email verification code"
-        body = f"Please enter your email address by entering following otp code"
-        mailTo = data.get("mailTo")
-        sessionKey = data.get("sessionKey")
-        request.session[sessionKey] = otp
-        request.session.set_expiry(300)
-        status = sendMail(subject, body, mailTo)
-        if status:
+        subject = "Account verification code"
+        message = f"Verify your account with this otp.This otp will expire  after 5 minutes.<br><strong>{otp}</strong>"
+        
+        status = sendMail(subject,message,mailto)
+
+        if status == 1:
+            request.session[sessionKey] = otp
+            request.session.set_expiry(300)
             return JsonResponse(
-                {"status": "success", "message": "Email send successfully"}, status=200
+                {
+                    "status": True,
+                    "key":sessionKey,
+                    "message": "verification code sent successfully",
+                },
+                status=200
+                
             )
         else:
             return JsonResponse(
-                {"status": "fail", "message": "Something went wrong"}, status=401
+                {
+                    "status": False,
+                    "message": "Something went wrong.verification code  does not sent.",
+                },
+                status=400,
             )
     except Exception as e:
+        print(e)
         return JsonResponse(
-            {"status": "fail", "message": f"Exception occured while sending email:{e}"},
+            {"status": False, "message": f"Exception occured while sending email:{e}"},
             status=500,
         )
 
@@ -162,7 +178,7 @@ def getRecommission(request):
         totalData = Produsts.objects.count()
         start_index = offset
         end_index = offset + limit
-        products = Produsts.objects.all()
+        products =  Produsts.objects.annotate(avg_rating=Avg('rating__rating')).order_by('-avg_rating')[start_index:end_index]
         recommended = getProducts(products)
 
         if recommended is not None:
@@ -369,6 +385,7 @@ def placeOrder(request):
         data = json.loads(data)
         userId = int(data[0]["userId"])
         user = User.objects.filter(id=userId).first()
+        userEmail=user.email
         isSuccessful = True
         for item in data:
             product = Produsts.objects.filter(id=19).first()
@@ -385,6 +402,9 @@ def placeOrder(request):
             else:
                 isSuccessful = False
         if isSuccessful:
+            subject="Ordre conformation"
+            body=f"Your order has been placed successfully.Your order will be delivered to your address {user.address} within {order.created_at + timedelta(days=1)}-{order.created_at+timedelta(day=4)}"
+            status = sendMail(subject,body,userEmail)
             return JsonResponse(
                 {
                     "status": "success",
@@ -828,3 +848,23 @@ def registerMyShop(request):
             return JsonResponse({"status": False, "message": f"Exception: {e}"}, status=500)
     else:
         return JsonResponse({"message": "Only POST requests are allowed","status":False}, status=405)
+
+@api_view(['POST'])
+def verifyOTP(request):
+    try:
+        data=request.data
+        sessionKey=data.get('sessionKey')
+        serverOTP=request.session.get(sessionKey)
+        email=data.get('email')
+        otp=int(data.get('otp'))
+        if otp==serverOTP:
+            subject="Registration successfull"
+            body=f"Welcome to our  shopping  platform,Mrs/Mr{sessionKey}.Enjoy your shopping experience"
+            sendMail(subject,body,email)
+            return JsonResponse({"status": True, "message": "OTP verified successfully"}, status=200)
+        else:
+            return JsonResponse({"status": False, "message": "OTP not verified.Please try gaian"}, status=400)
+    except Exception as e:
+        l.exception(e)
+        return JsonResponse({"status": False, "message": f"Exception: {e}"}, status=500)
+    
