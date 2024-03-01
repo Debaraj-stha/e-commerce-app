@@ -321,6 +321,7 @@ _getOrders(IsolateData data) async {
 
 getRecommendet(BuildContext context,
     {isLoadMore = false, limit = 10, offset = 0}) async {
+  print("method called");
   ReceivePort receivePort = ReceivePort();
   RootIsolateToken token = RootIsolateToken.instance!;
   IsolateData data = IsolateData(
@@ -332,11 +333,15 @@ getRecommendet(BuildContext context,
     "offset": offset,
   };
   try {
+    print("insie try");
     await Isolate.spawn(_getRecommendet, map);
     receivePort.listen((message) {
-      _homeModelView.loadRecommendedData(context, message);
+      print("message: $message");
+      _homeModelView.loadRecommendedData(context, message,
+          isLoadMore: isLoadMore);
     });
   } catch (e) {
+    print("inside cartch");
     Utils.printMessage(e.toString());
   }
 }
@@ -369,7 +374,8 @@ getLowBudget(BuildContext context,
   try {
     await Isolate.spawn(_getLowBudget, map);
     receivePort.listen((message) {
-      _homeModelView.loadLowBudgetData(context, message);
+      _homeModelView.loadLowBudgetData(context, message,
+          isLoadMore: isLoadMore);
     });
   } catch (e) {
     Utils.printMessage(e.toString());
@@ -383,6 +389,7 @@ _getLowBudget(Map<String, dynamic> data) async {
   try {
     String url = "${AppURL.lowBudget}?limit=$limit&offset=$offset";
     final res = await NetworkAPI().getRequest(url);
+    print("res$res");
     data['isolate'].answerPort.send(res);
   } catch (e) {
     throw e.toString();
@@ -404,7 +411,8 @@ getCategory(BuildContext context,
   try {
     await Isolate.spawn(_getCategory, map);
     receivePort.listen((message) {
-      _homeModelView.loadCategory(context, message);
+      _homeModelView.loadCategory(context, message, isLoadMore: isLoadMore);
+      print(message.toString());
     });
   } catch (e) {
     Utils.printMessage(e.toString());

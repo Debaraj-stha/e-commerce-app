@@ -19,11 +19,12 @@ class HomeModelView extends GetxController {
   RxList<Products> categoryProduct = <Products>[].obs;
   RxBool isLoading = RxBool(true);
   Map<String, dynamic> currentItemLimitOffset = {};
-  Future<void> loadCategory(BuildContext context, dynamic res) async {
+  Future<void> loadCategory(BuildContext context, dynamic res,
+      {bool isLoadMore = false}) async {
     try {
       await Future.delayed(const Duration(seconds: 2));
 
-      if (_category.isEmpty) {
+      if (_category.isEmpty || isLoadMore) {
         String status = res['status'];
 
         if (status.toLowerCase() == 'success') {
@@ -42,9 +43,10 @@ class HomeModelView extends GetxController {
     }
   }
 
-  Future<void> loadRecommendedData(BuildContext context, dynamic res) async {
+  Future<void> loadRecommendedData(BuildContext context, dynamic res,
+      {bool isLoadMore = false}) async {
     try {
-      if (_recommendations.isEmpty) {
+      if (_recommendations.isEmpty || isLoadMore) {
         await Future.delayed(const Duration(seconds: 2));
         String status = res['status'];
         if (status.toLowerCase() == 'success') {
@@ -63,23 +65,25 @@ class HomeModelView extends GetxController {
     }
   }
 
-  Future<void> loadLowBudgetData(BuildContext context, dynamic res) async {
+  Future<void> loadLowBudgetData(BuildContext context, dynamic res,
+      {bool isLoadMore = false}) async {
     try {
-      await Future.delayed(const Duration(seconds: 2));
+      if (_lowBudget.isEmpty || isLoadMore) {
+        await Future.delayed(const Duration(seconds: 2));
 
-      String status = res['status'];
+        String status = res['status'];
 
-      if (status.toLowerCase() == 'success') {
-        final data = res['data'];
+        if (status.toLowerCase() == 'success') {
+          final data = res['data'];
 
-        for (var x in data) {
-          _lowBudget.add(Products.fromJson(x));
+          for (var x in data) {
+            _lowBudget.add(Products.fromJson(x));
+          }
         }
+        isLoading.value = false;
+        currentItemLimitOffset['3'] = lowBudget.length;
+        update();
       }
-      isLoading.value = false;
-      currentItemLimitOffset['3'] = lowBudget.length;
-      update();
-      // }
     } catch (e) {
       Utils().showSnackBar(e.toString(), context, isSuccess: false);
     }
@@ -113,7 +117,9 @@ class HomeModelView extends GetxController {
     switch (type) {
       case 1:
         final currentOffset = currentItemLimitOffset['1'];
+
         await getRecommendet(context, isLoadMore: true, offset: currentOffset);
+
         break;
       case 2:
         final currentOffset = currentItemLimitOffset['2'];

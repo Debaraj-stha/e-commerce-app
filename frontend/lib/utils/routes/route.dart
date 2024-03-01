@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/resources/appColors.dart';
+import 'package:frontend/view/categryPage.dart';
 import 'package:frontend/view/googlemap.dart';
 import 'package:frontend/view/home.dart';
 import 'package:frontend/view/login.dart';
@@ -52,6 +53,8 @@ class Routes {
         return MaterialPageRoute(builder: (context) => const CategoryProduct());
       case RoutesName.GOOGLEMAPPAGE:
         return MaterialPageRoute(builder: (context) => const GoogelMapPage());
+      case RoutesName.CATEGORYPAGE:
+        return MaterialPageRoute(builder: (context) => const CategoryPage());
 
       default:
         return MaterialPageRoute(builder: (context) {

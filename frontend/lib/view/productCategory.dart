@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend/model-view/home-view.dart';
 import 'package:get/get.dart';
 
-import '../../view/s.dart';
 import '../resources/components/buildHeading.dart';
 import '../resources/components/cardProduct.dart';
+import 'singleItem.dart';
 
 class CategoryProduct extends StatefulWidget {
   const CategoryProduct({super.key});

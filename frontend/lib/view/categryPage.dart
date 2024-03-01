@@ -10,14 +10,14 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'singleItem.dart';
 // import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class RecommendedPage extends StatefulWidget {
-  const RecommendedPage({super.key});
+class CategoryPage extends StatefulWidget {
+  const CategoryPage({super.key});
 
   @override
-  State<RecommendedPage> createState() => _RecommendedPageState();
+  State<CategoryPage> createState() => _CategoryPageState();
 }
 
-class _RecommendedPageState extends State<RecommendedPage> {
+class _CategoryPageState extends State<CategoryPage> {
   final HomeModelView _homeview = Get.find<HomeModelView>();
   final RefreshController _refreshController = RefreshController();
   @override
@@ -25,7 +25,7 @@ class _RecommendedPageState extends State<RecommendedPage> {
     return Scaffold(
       appBar: AppBar(
         title: const BoldText(
-          text: "Recommended",
+          text: "Category",
         ),
         centerTitle: true,
       ),
@@ -45,7 +45,7 @@ class _RecommendedPageState extends State<RecommendedPage> {
               Utils.printMessage("Refreshing");
             },
             onLoading: () async {
-              await _homeview.loadMoreData(1, context);
+              await _homeview.loadMoreData(2, context);
             },
             controller: _refreshController,
             child: ListView(
@@ -66,7 +66,7 @@ class _RecommendedPageState extends State<RecommendedPage> {
                       mainAxisSpacing: 10,
                     ),
                     itemBuilder: (context, index) {
-                      final products = _homeview.recommendations[index];
+                      final products = _homeview.category[index];
                       return InkWell(
                           onTap: () {
                             Navigator.push(
@@ -75,10 +75,15 @@ class _RecommendedPageState extends State<RecommendedPage> {
                                     builder: (context) =>
                                         SingleProduct(product: products)));
                           },
-                          child: ProductCard(product: products));
+                          child: ProductCard(
+                            product: products,
+                            isCartIcon: false,
+                            isWishlistIcon: false,
+                            isCategory: true,
+                          ));
                     },
                     scrollDirection: Axis.vertical,
-                    itemCount: _homeview.recommendations.length,
+                    itemCount: _homeview.category.length,
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true, // Add this line
                   ),

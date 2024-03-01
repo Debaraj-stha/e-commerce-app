@@ -325,4 +325,13 @@ class CartModelView extends GetxController {
       Utils.printMessage("exception$e");
     }
   }
+
+  RxMap<int, dynamic> selectedVarient = <int, dynamic>{}.obs;
+  bool getSelectedVarient(int key) => selectedVarient[key] ?? false;
+  changeselectedVarient(int key, bool value) {
+    selectedVarient.updateAll((key, value) => false);
+    selectedVarient[key] = value;
+
+    update();
+  }
 }

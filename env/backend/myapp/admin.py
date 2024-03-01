@@ -5,7 +5,7 @@ from myapp import models
 admin.site.register(models.User)
 admin.site.site_header = "E-Commerce Admin panel"
 admin.site.site_title = "E-commerce app"
-admin.site.register(models.Produsts)
+admin.site.register(models.Products)
 admin.site.register(models.Rating)
 admin.site.register(models.Order)
 admin.site.register(models.Message)

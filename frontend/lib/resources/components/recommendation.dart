@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/model-view/home-view.dart';
+import 'package:frontend/resources/appColors.dart';
 import 'package:frontend/utils/routes/routeName.dart';
-import 'package:frontend/view/s.dart';
+import 'package:frontend/view/singleItem.dart';
 import 'package:get/get.dart';
 
 import 'buildHeading.dart';
@@ -27,12 +28,15 @@ class _RecommendedState extends State<Recommended> {
           onTap: () {
             Navigator.pushNamed(context, RoutesName.RECOMMENDEDPAGE);
           },
-          child: const Row(
+          child: Row(
             children: [
-              BuildHeading(
+              const BuildHeading(
                 text: "Recommended",
               ),
-              Icon(Icons.arrow_right_alt)
+              Icon(
+                Icons.arrow_right_alt,
+                color: AppColors.primary,
+              )
             ],
           ),
         ),

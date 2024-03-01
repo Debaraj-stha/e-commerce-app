@@ -18,4 +18,5 @@ class RoutesName {
   static const RECOMMENDEDPAGE = 'recommended_page';
   static const GOOGLEMAPPAGE = 'google_map_page';
   static const SEARCHLOCATION = 'search_location';
+  static const CATEGORYPAGE = 'category_page';
 }

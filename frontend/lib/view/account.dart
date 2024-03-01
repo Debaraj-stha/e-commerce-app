@@ -24,8 +24,8 @@ class _AccountState extends State<Account> {
   void initState() {
     // TODO: implement initState
     // _cartModelView.getWishListItem();
-    // _accountViewModel.getUserDetails(context);
-    // _accountViewModel.getPurchaseData();
+    _accountViewModel.getUserDetails(context);
+    _accountViewModel.getPurchaseData();
     super.initState();
   }
 
@@ -178,9 +178,5 @@ class _AccountState extends State<Account> {
         ],
       ),
     ));
-  }
-
-  Widget BuildProductReview() {
-    return const Row();
   }
 }

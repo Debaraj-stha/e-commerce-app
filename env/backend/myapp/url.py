@@ -9,7 +9,7 @@ urlpatterns = [
     path("", views.loadTemplates),
     path("user/register", views.RegisterUser),
     path("category/product", views.getCategoryProduct),
-    path("product/recommendation", views.getRecommission),
+    path("product/recommendation", views.getRecommendation),
     path("send-email", views.sendOTP),
     path("user/login", views.Login),
     path("category/group", views.getAllCategory),

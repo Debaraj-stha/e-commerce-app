@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:frontend/utils/Notifier.dart';
@@ -22,6 +25,7 @@ class SignUpViewModel extends GetxController {
   late FocusNode nameNode;
   late FocusNode emailNode;
   TextEditingController otpConroller = TextEditingController();
+  FocusNode optNode = FocusNode();
   bool isVerified = false;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -135,5 +139,22 @@ class SignUpViewModel extends GetxController {
       Utils.printMessage(message);
       Utils.toastMessage(message);
     }
+  }
+
+  Timer? timer;
+  startTimer() {
+    timer = Timer(const Duration(minutes: 3), () {
+      Utils.printMessage("Timer started");
+    });
+  }
+
+  void updateTimer() {
+    startTimer();
+    Timer.periodic(const Duration(seconds: 1), (t) {
+      if (timer!.tick.minutes == 3) {
+        timer!.cancel();
+      }
+      Utils.printMessage(timer!.tick.minutes.toString());
+    });
   }
 }

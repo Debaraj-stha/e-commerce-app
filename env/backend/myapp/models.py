@@ -50,7 +50,7 @@ class Shop(models.Model):
         return self.name
 
 
-class Produsts(models.Model):
+class Products(models.Model):
     title = models.CharField(max_length=255, null=False)
     category = models.CharField(max_length=120, null=False)
     image = models.CharField(max_length=255)
@@ -76,7 +76,7 @@ class Rating(models.Model):
         max_digits=5,
     )
     product = models.ForeignKey(
-        Produsts,
+        Products,
         on_delete=models.CASCADE,
         null=False,
     )
@@ -103,7 +103,7 @@ class Order(models.Model):
         max_length=50, choices=PAYMENT_METHOD, default=PaymentMethod.CASH
     )
     product = models.ForeignKey(
-        Produsts, on_delete=models.CASCADE, null=True, blank=True
+        Products, on_delete=models.CASCADE, null=True, blank=True
     )
     quantity = models.IntegerField(default=1, null=True, blank=True)
     shop=models.ForeignKey(Shop, on_delete=models.CASCADE,null=True,blank=True)

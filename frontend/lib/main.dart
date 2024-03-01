@@ -13,7 +13,6 @@ import 'package:frontend/model-view/reviewModelView.dart';
 import 'package:frontend/utils/constraints.dart';
 import 'package:frontend/utils/handleTheme.dart';
 import 'package:frontend/utils/utils.dart';
-import 'package:frontend/view/otpPage.dart';
 import 'package:get/get.dart';
 import 'package:khalti_flutter/khalti_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,6 +22,8 @@ import 'model-view/cart-view.dart';
 import 'model-view/home-view.dart';
 import 'model-view/searchModelView.dart';
 import 'repository/theme.dart';
+import 'utils/routes/route.dart';
+import 'utils/routes/routeName.dart';
 import 'utils/topLevelFunction.dart';
 
 void main() async {
@@ -42,7 +43,6 @@ void main() async {
   ReviewModelView r = Get.put(ReviewModelView());
   await dbController.initDatabase();
 
-  bool login = await isLoggedIn();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   FirebaseMessaging.onBackgroundMessage(backgroundMessageHandler);
@@ -52,20 +52,19 @@ void main() async {
   FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
       badge: true, sound: true, alert: true);
 
-  runApp(MyApp(locale: language, themeMode: theme, loggedIn: login));
+  runApp(MyApp(locale: language, themeMode: theme));
 }
 
 //resource://drawable/res_app_icon
 class MyApp extends StatefulWidget {
-  const MyApp(
-      {super.key,
-      required this.locale,
-      required this.themeMode,
-      required this.loggedIn});
+  const MyApp({
+    super.key,
+    required this.locale,
+    required this.themeMode,
+  });
   final String locale;
 
   final ThemeMode themeMode;
-  final bool loggedIn;
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -95,9 +94,9 @@ class _MyAppState extends State<MyApp> {
                 : Locale(widget.locale),
             supportedLocales: const [Locale('en'), Locale('hi')],
             title: 'Flutter Demo',
-            home: const OTPPage(),
-            // initialRoute: RoutesName.Home,
-            // onGenerateRoute: Routes.generateRoute,
+            // home: const OTPPage(),
+            initialRoute: RoutesName.Home,
+            onGenerateRoute: Routes.generateRoute,
             themeMode: widget.themeMode,
             theme: Themes().lightTheme,
             darkTheme: Themes().darkTheme,

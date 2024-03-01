@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frontend/model-view/cart-view.dart';
-import 'package:frontend/model/cartModel.dart';
 import 'package:frontend/model/productModel.dart';
-import 'package:frontend/resources/appColors.dart';
-import 'package:frontend/resources/components/buildIcon.dart';
 import 'package:frontend/resources/components/mediumText.dart';
 import 'package:frontend/resources/components/smallText.dart';
 import 'package:frontend/resources/widget/buildFilledIconWishlistButton.dart';
@@ -105,9 +101,6 @@ class ProductCard extends StatelessWidget {
             ),
             const SizedBox(
               height: 10,
-            ),
-            SmallText(
-              text: "product id is${product.id}",
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

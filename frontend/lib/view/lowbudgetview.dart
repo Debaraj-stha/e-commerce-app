@@ -6,7 +6,7 @@ import 'package:frontend/resources/components/cardProduct.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 's.dart';
+import 'singleItem.dart';
 
 class LowBudgetProduct extends StatefulWidget {
   const LowBudgetProduct({super.key});
@@ -40,10 +40,12 @@ class _LowBudgetProductState extends State<LowBudgetProduct> {
           return SmartRefresher(
             controller: _controller,
             enablePullDown: true,
-            onLoading: () {
-              _homeview.loadMoreData(3, context);
+            enablePullUp: true,
+            onRefresh: () {},
+            onLoading: () async {
+              await _homeview.loadMoreData(3, context);
             },
-            child: Column(
+            child: ListView(
               children: [
                 const SizedBox(
                   height: 10,

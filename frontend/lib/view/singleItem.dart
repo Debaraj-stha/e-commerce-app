@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:frontend/model-view/cart-view.dart';
 import 'package:frontend/model-view/ordre.dart';
 import 'package:frontend/model/orderModel.dart';
 import 'package:frontend/model/productModel.dart';
@@ -173,34 +174,40 @@ class _SingleProductState extends State<SingleProduct> {
   }
 
   Widget BuildCustomRadio(List value, int selectedValue, String title) {
+    CartModelView c = Get.find<CartModelView>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         BoldText(
           text: title,
         ),
-        Wrap(
-            children: List.generate(value.length, (index) {
-          return InkWell(
-            onTap: () {},
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-              margin: const EdgeInsets.only(right: 6),
-              decoration: BoxDecoration(
-                  color: index == selectedValue
-                      ? Colors.blue
-                      : AppColors.secondary,
-                  borderRadius: BorderRadius.circular(5)),
-              child: Text(
-                value[index].toString(),
-                style: Theme.of(context).primaryTextTheme.bodySmall!.copyWith(
-                    color: index == selectedValue
-                        ? AppColors.secondary
-                        : AppColors.third),
+        Obx(
+          () => Wrap(
+              children: List.generate(value.length, (index) {
+            bool selectedIndexValue = c.getSelectedVarient(index);
+            return InkWell(
+              onTap: () {
+                c.changeselectedVarient(
+                    index, !selectedIndexValue ? true : false);
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                margin: const EdgeInsets.only(right: 6),
+                decoration: BoxDecoration(
+                    color:
+                        selectedIndexValue ? Colors.blue : AppColors.secondary,
+                    borderRadius: BorderRadius.circular(5)),
+                child: Text(
+                  value[index].toString(),
+                  style: Theme.of(context).primaryTextTheme.bodySmall!.copyWith(
+                      color: selectedIndexValue
+                          ? AppColors.secondary
+                          : AppColors.third),
+                ),
               ),
-            ),
-          );
-        })),
+            );
+          })),
+        ),
       ],
     );
   }

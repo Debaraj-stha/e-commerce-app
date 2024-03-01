@@ -171,14 +171,15 @@ def sendOTP(request):
 
 
 @api_view(["GET"])
-def getRecommission(request):
+def getRecommendation(request):
     try:
         limit = int(request.GET.get("limit", 10))
         offset = int(request.GET.get("offset", 0))
-        totalData = Produsts.objects.count()
+        totalData = Products.objects.count()
         start_index = offset
         end_index = offset + limit
-        products =  Produsts.objects.annotate(avg_rating=Avg('rating__rating')).order_by('-avg_rating')[start_index:end_index]
+        products =  Products.objects.annotate(avg_rating=Avg('rating__rating')).order_by('-avg_rating')[start_index:end_index]
+        print(products)
         recommended = getProducts(products)
 
         if recommended is not None:
@@ -186,7 +187,7 @@ def getRecommission(request):
                 {
                     "status": "success",
                     "message": "Recommended products",
-                    "data": recommended[start_index:end_index],
+                    "data": recommended,
                     "length": totalData,
                     "page": offset,
                 },
@@ -218,7 +219,7 @@ def getAllCategory(request):
     try:
 
         categories_with_products = (
-            Produsts.objects.values("category", "id", "title", "price", "image")
+            Products.objects.values("category", "id", "title", "price", "image")
             .distinct("category")
             .order_by("category")
         )
@@ -272,7 +273,7 @@ def getCategoryProduct(request):
         offset = int(data.get("offset", 0))
         startIndex = offset
         endIndex = offset + limit
-        products = Produsts.objects.filter(category=category)[startIndex:endIndex]
+        products = Products.objects.filter(category=category)[startIndex:endIndex]
         res = getProducts(products)
         if res is not None:
             return JsonResponse(
@@ -302,7 +303,7 @@ def getCategoryProduct(request):
 def getSearchElement(request):
     try:
         query = request.GET.get("q").lower()
-        products = Produsts.objects.filter(
+        products = Products.objects.filter(
             Q(title__contains=query)
             | Q(tags__contains=[query])
             | Q(brand__contains=query)
@@ -343,9 +344,9 @@ def postReview(request):
         productId = int(data.get("productId"))
         user = User.objects.filter(id=userId).first()
 
-        p = Produsts.objects.all()
+        p = Products.objects.all()
 
-        product = Produsts.objects.filter(id=productId).first()
+        product = Products.objects.filter(id=productId).first()
 
         if user is not None and product is not None:
             Rate = Rating(rating=rating, user=user, product=product, feedback=feedback)
@@ -388,7 +389,7 @@ def placeOrder(request):
         userEmail=user.email
         isSuccessful = True
         for item in data:
-            product = Produsts.objects.filter(id=19).first()
+            product = Products.objects.filter(id=19).first()
             print("product" + str(product))
             if user is not None or product is not None:
                 order = Order(
@@ -512,10 +513,11 @@ def lowBudget(request):
         offset = int(request.GET.get("offset", 0))
         startIndex = offset
         endIndex = offset + limit
-        products = Produsts.objects.all().order_by("-price")[
+        products = Products.objects.annotate(avg_rating=Avg('rating__rating')).order_by("price")[
             startIndex:endIndex
         ]  # Order by price in ascending order
         res = getProducts(products)
+        res.sort(key=lambda x:x['price'])
         return JsonResponse(
             {"status": "success", "message": "Data loaded successfully", "data": res},
             status=200,
@@ -633,7 +635,7 @@ def getMessage(request):
 def getSingleProduct(request):
     try:
         productId = int(request.GET.get("productId"))
-        product = Produsts.objects.filter(id=productId)
+        product = Products.objects.filter(id=productId)
         data = getProducts(product)
         return JsonResponse(
             {"status": "success", "message": "product get successfully", "data": data},

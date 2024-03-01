@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/model-view/home-view.dart';
+import 'package:frontend/resources/appColors.dart';
+import 'package:frontend/utils/routes/routeName.dart';
 import 'package:get/get.dart';
 
 import '../../utils/utils.dart';
@@ -24,14 +26,17 @@ class _CategoryState extends State<Category> {
         ),
         InkWell(
           onTap: () {
-            _h.loadMoreData(1, context);
+            Navigator.pushNamed(context, RoutesName.CATEGORYPAGE);
           },
-          child: const Row(
+          child: Row(
             children: [
-              BuildHeading(
+              const BuildHeading(
                 text: "Category",
               ),
-              Icon(Icons.arrow_right_alt)
+              Icon(
+                Icons.arrow_right_alt,
+                color: AppColors.primary,
+              )
             ],
           ),
         ),

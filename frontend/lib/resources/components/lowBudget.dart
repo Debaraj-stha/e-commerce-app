@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/model-view/home-view.dart';
+import 'package:frontend/resources/appColors.dart';
 import 'package:frontend/utils/routes/routeName.dart';
 import 'package:get/get.dart';
 
-import '../../view/s.dart';
+import '../../view/singleItem.dart';
 import 'buildHeading.dart';
 import 'cardProduct.dart';
 
@@ -27,11 +28,11 @@ class _LowBudgetState extends State<LowBudget> {
           onTap: () {
             Navigator.pushNamed(context, RoutesName.LOWBUDGETPAGE);
           },
-          child: const Row(children: [
-            BuildHeading(
+          child: Row(children: [
+            const BuildHeading(
               text: "Low Budget",
             ),
-            Icon(Icons.arrow_right_alt)
+            Icon(Icons.arrow_right_alt, color: AppColors.primary)
           ]),
         ),
         const SizedBox(

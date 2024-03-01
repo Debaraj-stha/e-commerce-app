@@ -1,14 +1,11 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:frontend/model-view/searchModelView.dart';
-import 'package:frontend/model/productModel.dart';
 import 'package:frontend/model/searchModel.dart';
 import 'package:frontend/resources/appColors.dart';
 import 'package:frontend/resources/components/mediumText.dart';
 import 'package:frontend/resources/components/smallText.dart';
 import 'package:frontend/resources/widget/buildSearchBar.dart';
-import 'package:frontend/view/s.dart';
+import 'package:frontend/view/singleItem.dart';
 import 'package:get/get.dart';
 
 class SearchView extends StatefulWidget {
@@ -34,9 +31,8 @@ class _SearchViewState extends State<SearchView> {
         children: [
           BuildSearchBar("Search ...", context),
           Positioned(
-            
               child: Container(
-                margin: EdgeInsets.only(top: 10),
+            margin: const EdgeInsets.only(top: 10),
             height: _searchModeView.search.length * 120,
             color: AppColors.secondary,
             child: ListView.builder(
@@ -44,12 +40,16 @@ class _SearchViewState extends State<SearchView> {
                 itemBuilder: (context, index) {
                   final search = _searchModeView.search[index];
                   return InkWell(
-                    onTap: () {
-                    _searchModeView.getSpecificProduct(search.id);
-                    Future.delayed(Duration(seconds: 1));
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>SingleProduct(product: _searchModeView.product!)));
-                    },
-                    child: BuildSearchItem(search, index.toString()));
+                      onTap: () {
+                        _searchModeView.getSpecificProduct(search.id);
+                        Future.delayed(const Duration(seconds: 1));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SingleProduct(
+                                    product: _searchModeView.product!)));
+                      },
+                      child: BuildSearchItem(search, index.toString()));
                 }),
           )),
         ],
@@ -62,19 +62,24 @@ class _SearchViewState extends State<SearchView> {
       decoration: BoxDecoration(
           border: Border(bottom: BorderSide(color: AppColors.third))),
       child: ListTile(
-        leading: Container(
+        leading: SizedBox(
           width: 60,
-          child:  Image(
-          image: NetworkImage(search.image),
-          errorBuilder: (context, error, stackTrace) {
-            return Center(child: MediumText(text: "error while loading image",),);
-          },
+          child: Image(
+            image: NetworkImage(search.image),
+            errorBuilder: (context, error, stackTrace) {
+              return const Center(
+                child: MediumText(
+                  text: "error while loading image",
+                ),
+              );
+            },
           ),
         ),
         title: MediumText(
-          text: search.title!.length>75?search.title!.substring(0,75):search.title,
+          text: search.title.length > 75
+              ? search.title.substring(0, 75)
+              : search.title,
         ),
-     
         trailing: SmallText(
           text: "Rs:${search.price}",
         ),

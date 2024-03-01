@@ -7,6 +7,8 @@ import 'package:frontend/resources/appColors.dart';
 import 'package:frontend/resources/components/bigText.dart';
 import 'package:frontend/resources/components/boldText.dart';
 import 'package:frontend/resources/components/mediumText.dart';
+import 'package:frontend/utils/routes/routeName.dart';
+import 'package:frontend/utils/topLevelFunction.dart';
 import 'package:frontend/utils/utils.dart';
 import 'package:get/get.dart';
 
@@ -82,7 +84,10 @@ class _PurchasePageState extends State<PurchasePage> {
                 height: 20,
               ),
               ElevatedButton.icon(
-                  onPressed: () {
+                  onPressed: () async {
+                    if (await isLoggedIn()) {
+                      Navigator.pushNamed(context, RoutesName.Login);
+                    }
                     if (widget.model == null) {}
                     showPayMentDialog(context, widget.model!);
                   },
