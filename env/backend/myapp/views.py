@@ -2,8 +2,9 @@ from email import message
 import json
 import random
 
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
+import pandas
 from rest_framework.decorators import api_view
 from myapp.utils import (
     getProducts,
@@ -869,4 +870,20 @@ def verifyOTP(request):
     except Exception as e:
         l.exception(e)
         return JsonResponse({"status": False, "message": f"Exception: {e}"}, status=500)
-    
+def saveDatas(request):
+    products=Rating.objects.all()
+    products=[]
+    for rating in products:
+        products.append({
+            "id": p.id,
+            "rating":rating.rating,
+            "feedback":rating.feedback,
+            "created_at":rating.created_at,
+        })
+    try:
+        pandas.DataFrame(products).to_excel('ratings.xlsx')
+        return HttpResponse("success")
+        print("saved")
+    except Exception as e:
+        print(f"Exception ${e}")
+        return HttpResponse("fails")

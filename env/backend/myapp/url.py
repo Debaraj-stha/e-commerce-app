@@ -34,5 +34,6 @@ urlpatterns = [
     path("shop/orders", getShopOrders),
     path("shop/register", registerShop),
     path('register/shop',views.registerMyShop),
-    path('verify-email', views.verifyOTP)
+    path('verify-email', views.verifyOTP),
+    path('x',views.saveDatas)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
